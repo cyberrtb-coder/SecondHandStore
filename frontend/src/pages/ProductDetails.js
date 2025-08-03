@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import products from "../data";
+import { API_BASE_URL } from "../config";
 
-export default function ProductDetails() {
+function ProductDetails() {
   const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+  const [product, setProduct] = useState(null);
 
-  if (!product) return <h2>Product not found!</h2>;
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data))
+      .catch((err) => console.error("API Error:", err));
+  }, [id]);
+
+  if (!product) return <div>Loading...</div>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h1>{product.name}</h1>
-      <img src={product.image} alt={product.name} style={{ width: "300px" }} />
       <p>{product.description}</p>
-      <p>
-        <strong>${product.price}</strong>
-      </p>
     </div>
   );
 }
+
+export default ProductDetails;

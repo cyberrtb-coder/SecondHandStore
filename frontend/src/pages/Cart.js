@@ -1,10 +1,8 @@
-import React from "react";
+import { API_BASE_URL } from "../config";
 
-export default function Cart() {
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>Your Cart</h1>
-      <p>Cart functionality coming soon...</p>
-    </div>
-  );
-}
+useEffect(() => {
+  fetch(`${API_BASE_URL}/api/cart`)
+    .then((res) => res.json())
+    .then((data) => setCartItems(data))
+    .catch((err) => console.error("API Error:", err));
+}, []);
